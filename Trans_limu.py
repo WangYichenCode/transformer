@@ -89,7 +89,7 @@ class MultiHeadAttention(nn.Module):
         value = self.W_v(x_v).view(batch_size, -1, self.num_head, self.d_k).transpose(1, 2)
         if mask is not None:
             mask = mask.unsqueeze(1)  # 增加一个维度，且应用到所有的上面
-        attn_out = attention(query, key, value,mask=mask, dropout=self.dropout).permute(0, 2, 1, 3)
+        attn_out = attention(query, key, value,mask=mask, dropout=self.dropout).permute(0, 2, 1, 3).contiguous()
         concat_out = attn_out.view(batch_size, x_q.size(1), -1)  # concat attention
         del query
         del key
